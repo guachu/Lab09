@@ -54,7 +54,11 @@ var app = (function () {
 
         init: function () {
             var can = document.getElementById("canvas");
-            
+            can.addEventListener('click', function(event){
+                var pt = getMousePosition(event);
+                addPointToCanvas(pt);
+                stompClient.send("/topic/newpoint", {}, JSON.stringify(pt));
+            });
             //websocket connection
             connectAndSubscribe();
         },
