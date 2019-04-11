@@ -21,7 +21,7 @@ package edu.eci.arsw.collabpaint.model;
  * @author hcadavid
  */
 public class Point {
-    int x,y;
+    public int x,y;
 
     public Point() {
     }

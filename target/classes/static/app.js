@@ -19,6 +19,20 @@ var app = (function () {
     };
     
     
+    var addPolygonToCanvas = function (eventbody){
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var polygon=JSON.parse(eventbody.body);
+        ctx.fillStyle = '#2629ff';
+        ctx.beginPath();
+        ctx.moveTo(polygon.x, polygon.y);
+        for (var i=1;i<polygon.length;i++) {
+            ctx.lineTo(polygon[i].x,polygon[i].y);
+        }
+        ctx.closePath();
+        ctx.fill();
+    };
+
     var getMousePosition = function (evt) {
         canvas = document.getElementById("canvas");
         var rect = canvas.getBoundingClientRect();
@@ -40,6 +54,10 @@ var app = (function () {
             stompClient.subscribe(room, function (eventbody) {
                 
                 AlertMessage(eventbody);
+                addPointToCanvas(new Point(eventbody.x,eventbody.y));
+            });
+            stompClient.subscribe(room, async function (eventbody){
+                addPolygonToCanvas(eventbody);
             });
         });
 
