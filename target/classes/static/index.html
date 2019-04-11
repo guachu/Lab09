@@ -17,22 +17,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Pinturilo ome</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/webjars/jquery/jquery.min.js"></script>
         <script src="/webjars/sockjs-client/sockjs.min.js"></script>
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>  
         <script src="/app.js"></script>
+        <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="styles.css">
 
     </head>
 
 
     
-    <body onload="app.init()">
-        X:<input id="x" type="number"/>
-        Y:<input id="y" type="number"/>        
-        <button onclick="app.publishPoint($('#x').val(),$('#y').val())">Send point</button>
-        <canvas id="canvas" width="800" height="600"></canvas>
+    <body>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="h1 text-center">Pinturilo ome</div>
+                    <center class="input">
+                        <label for="numberDibujo">Sala: </label>
+                        <input type="number" name="dibujo" id="numberDibujo">
+                        <button class="btn btn-default" onclick="app.init($('#numberDibujo').val())">Connect</button>
+                        <br>
+                        <label for="x">X:</label>
+                        <input id="x" name="x" type="number" placeholder="x position" required="true"/>
+                        <label for="y">Y:</label>
+                        <input id="y" name="y" type="number" placeholder="y position" required="true"/>        
+                        <button onclick="app.publishPoint($('#x').val(),$('#y').val())" class="btn btn-default">Send point</button>
+                        <br>
+                        <div class="col-md-8 col-md-offset-2">                    
+                            <canvas id="canvas" width="800" height="600"></canvas>
+                        </div>
+                    </center>
+                    
+                </div>                
+            </div>
+        </div>                
     </body>
 </html>

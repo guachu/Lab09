@@ -8,6 +8,7 @@ var app = (function () {
     }
     
     var stompClient = null;
+    var room;
 
     var addPointToCanvas = function (point) {        
         var canvas = document.getElementById("canvas");
@@ -36,13 +37,23 @@ var app = (function () {
         //subscribe to /topic/newpoint when connections succeed
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/newpoint', function (eventbody) {
+            stompClient.subscribe(room, function (eventbody) {
                 
                 AlertMessage(eventbody);
             });
         });
 
     };
+
+
+    var listenerMouse = function (event) {
+        var can = document.getElementById("canvas");
+        can.addEventListener('click', function(event){
+            var pt = getMousePosition(event);
+            addPointToCanvas(pt);                
+            stompClient.send(room, {}, JSON.stringify(pt));
+        });
+    }
     
     
     var AlertMessage = function (greeting) {
@@ -52,24 +63,18 @@ var app = (function () {
 
     return {
 
-        init: function () {
-            var can = document.getElementById("canvas");
-            can.addEventListener('click', function(event){
-                var pt = getMousePosition(event);
-                addPointToCanvas(pt);
-                stompClient.send("/topic/newpoint", {}, JSON.stringify(pt));
-            });
-            //websocket connection
-            connectAndSubscribe();
+        init: function (val) {
+            room = "/topic/newpoint." + val;            
+            connectAndSubscribe()
+            listenerMouse(event)
         },
 
         publishPoint: function(px,py){
             var pt=new Point(px,py);
             console.info("publishing point at "+pt);
             addPointToCanvas(pt);
-
             //publicar el evento
-            stompClient.send("/topic/newpoint", {}, JSON.stringify(pt));
+            stompClient.send(room, {}, JSON.stringify(pt));
         },
 
         disconnect: function () {
